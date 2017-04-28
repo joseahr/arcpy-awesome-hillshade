@@ -171,3 +171,29 @@ if arcpy.CheckExtension('Spatial') == 'Available':
 else:
     print ('Licencia no disponible')
 ```
+
+# Resultados 
+***
+
+Se han realizado varias pruebas con distintos focos de luz:
+- Prueba 1 : 3 focos de luz
+
+| acimut | elevacion |
+| :--------: | :--------: |
+| 90   | 90   |
+| 180  | 45   |
+| 270  | 50   |
+
+ ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/prueba_1_res.png)
+
+- Prueba 2 : 
+
+| acimut | elevacion |
+| :--------: | :--------: |
+| 90   | 50   |
+| 270  | 90   |
+
+ ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/prueba_2_res.png)
+
+
+
