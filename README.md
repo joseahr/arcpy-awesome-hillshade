@@ -1,11 +1,11 @@
 # Introducción y Objetivos
 ***
 
-El objetivo del presente documento es mostrar el trabajo realizado en la elaboración de una herramienta para ArcMap que realiza una combinación múltiple de sombreados sobre una imagen en formato ráster.
+El objetivo del presente documento es mostrar el trabajo realizado en la elaboración de una herramienta para **ArcMap** que realiza una ```combinación múltiple``` de sombreados sobre una imagen en formato ráster.
 
-> El problema reside en que en muchas ocasiones y debido a la variabilidad del terreno, un único tipo de sombreado no es óptimo para todas las zonas, por lo que sería útil disponer de una herramienta más flexible que permitiese combinar diversos focos de luz para mejorar el resultado final. (Inmhof, 1982; Keates, 1989)
+> El problema reside en que en muchas ocasiones y debido a la variabilidad del terreno, un único tipo de sombreado no es óptimo para todas las zonas, por lo que sería útil disponer de una herramienta más flexible que permitiese combinar diversos focos de luz para mejorar el resultado final. ```(Inmhof, 1982; Keates, 1989)```
 
-La herramienta diseñada permite la combinación de múltiples focos de luz simultaneamente, esto se consigue mediante la suma de los diferentes mapas de sombra generados independientemente para cada par de valores [acimut, elevación] y reescalando el resultado a un único rango de valores de gris [0, 255] 
+La herramienta diseñada permite la combinación de múltiples focos de luz simultaneamente, esto se consigue mediante la suma de los diferentes mapas de sombra generados independientemente para cada par de valores ```[acimut, elevación]``` y reescalando el resultado a un único rango de valores de gris ```[0, 255]```
 
 ### Herramientas utilizadas
 
@@ -21,19 +21,19 @@ El desarrollo para el formulario es bastante sencillo y se adapta más o menos a
  - Acimutes (MultiValue)
  - Elevaciones (MultiValue)
 
-Dentro de las posibilidades que ArcMap nos da es el mejor diseño posible. El formulario esperado podría ser una combinación del formulario generado cuando el tipo de dato es "Cell Size XY" y "MultiValue". Es decir, un formulario multivalor que almacene pares de valores [acimut, elevación]. Si intentamos reproducir esto, el formulario que genera ArcMap no funciona correctamente.
+Dentro de las posibilidades que ArcMap nos da es el mejor diseño posible. El formulario esperado podría ser una combinación del formulario generado cuando el tipo de dato es ```Cell Size XY``` y ```MultiValue```. Es decir, un formulario multivalor que almacene pares de valores ```[acimut, elevación]```. Si intentamos reproducir esto, el formulario que genera *ArcMap* no funciona correctamente.
 
 Algunas posibles alternativas para la creación del formulario:
- - Crear nuestro propio GUI utilizando PyQt4
- - Crear una pequeña aplicación de escritorio (PyQt4, Aplicaciones híbridas, ...)
+ - Crear nuestro propio GUI utilizando *PyQt4*
+ - Crear una pequeña aplicación de escritorio (*PyQt4*, Aplicaciones híbridas, ...)
 
-La primera alternativa funcionaría tanto como dentro del entorno de ArcMap (Como una herramienta de las toolboxes) como una aplicación de escritorio.
-> La segunda alternativa, si hablamos de aplicaciones híbridas (las cuales están creciendo a pasos agigantados en la actualidad), solo serviría fuera del entorno de ArcMap (Aunque por supuesto habría que tener instalado ArcMap y configurada la variable de entorno hacia el path de python de ArcGIS) pero nos da mucha flexibilidad para crear el formulario e interactuar con arcpy.
+La primera alternativa funcionaría tanto como dentro del entorno de *ArcMap* (Como una herramienta de las ```toolboxes```) como una aplicación de escritorio.
+> La segunda alternativa, si hablamos de ```aplicaciones híbridas``` (las cuales están creciendo a pasos agigantados en la actualidad), solo serviría fuera del entorno de *ArcMap* (Aunque por supuesto habría que tener instalado *ArcMap* y configurada la ```variable de entorno``` hacia el path de python de *ArcGIS*) pero nos da mucha flexibilidad para crear el formulario e interactuar con arcpy.
 
 Una combinación de herramientas/tecnologías para crear la aplicación podría ser:
- - Electron (Framework para crear aplicaciones de escritorio multiplataforma, basado en NodeJS)
- - Angular 4 y Angular Material (Lógica y diseño de nuestra aplicación) [Opcional]
- - Python 2.7 (arcpy) para ejecutar el script.
+ - *Electron* (Framework para crear aplicaciones de escritorio multiplataforma, basado en NodeJS)
+ - *Angular 4* y *Angular Material* (Lógica y diseño de nuestra aplicación) [Opcional]
+ - *Python 2.7* (*arcpy*) para ejecutar el script.
 
 # Desarrollo de la práctica
 ***
@@ -41,38 +41,38 @@ Una combinación de herramientas/tecnologías para crear la aplicación podría 
  El primer elemento de la herramienta llevado a cabo ha sido el formulario donde se introducirán los datos. 
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/gui.png) 
  
- Como se ha comentado antes consta de 4 parámetros:
+ Como se ha comentado antes consta de ```4 parámetros```:
   - Ráster de entrada (Input)
 
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_entrada.png)
 
  - Ráster de salida (Output)
 
-![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_salida.png)
+![Ráster de salida](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_salida.png)
 
  - Acimutes (MultiValue)
 
-![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/acimutes.png)
+![Acimutes](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/acimutes.png)
 
  - Elevaciones (MultiValue)
 
-![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/elevaciones.png)
+![Elevaciones](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/elevaciones.png)
 
-Al ser los acimutes y las elevaciones parámetros Long Multivalue, es decir una lista de acimutes y una lista de elevaciones, el usuario deberá introducir en orden los pares de valores, es decir el primer elemento de la lista de acimutes se corresponde con el primer elemento de las lista de elevaciones.
-Sobreescribiendo el método updateMessages de la clase ToolValidator, podemos modificar el comportamiento de validación de la herramienta y así adaptarlo para mostrar errores:
- - Cuando el usuario introduzca valores erroneos de acimut y elevación
+Al ser los acimutes y las elevaciones parámetros ```Long``` y ```Multivalue```, es decir una lista de acimutes y una lista de elevaciones, el usuario deberá introducir en orden los pares de valores, es decir el primer elemento de la lista de acimutes se corresponde con el primer elemento de las lista de elevaciones.
+Sobreescribiendo el método ```updateMessages``` de la clase ```ToolValidator```, podemos modificar el comportamiento de validación de la herramienta y así adaptarlo para mostrar errores:
+ - ```Cuando el usuario introduzca valores erróneos de acimut y elevación```
 
-![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error1.png)
+![Error Validación 1](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error1.png)
 
- - Para poder avisar al usuario que debe introducir el mismo número de acimutes y elevaciones.
+ - ```Para poder avisar al usuario que debe introducir el mismo número de acimutes y elevaciones```.
 
- ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error.png)
+ ![Error Validación 2](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error.png)
 
-Si hay el mismo número de elevaciones y acimutes, todos los acimutes introducidos están en el rango [0, 360] y todas las elevaciones introducidas están en el rango [0, 90] el formulario no mostrará ningún error de validación para los campos acimutes y elevaciones:
+Si hay el mismo número de elevaciones y acimutes, todos los acimutes introducidos están en el rango ```[0, 360]``` y todas las elevaciones introducidas están en el rango ```[0, 90]``` el formulario no mostrará ningún error de validación para los campos acimutes y elevaciones:
 
- ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/sin_errores.png)
+ ![GUI sin errores](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/sin_errores.png)
 
-A continuación se muestra el código (comentado) empleado para la validación, sobrescribiendo el método updateMessages de la clase ToolValidator:
+A continuación se muestra el código **comentado** empleado para la validación, sobrescribiendo el método ```updateMessages``` de la clase ```ToolValidator```:
 
 ```python
 import arcpy
@@ -126,7 +126,7 @@ class ToolValidator(object):
     return
 ```
 
-Y finalmente el código (comentado) del script que ejecuta el proceso:
+Y finalmente el código **comentado** del script que ejecuta el proceso:
 
 ```python
 import arcpy
@@ -176,7 +176,7 @@ else:
 ***
 
 Se han realizado varias pruebas con distintos focos de luz:
-- Prueba 1 : 3 focos de luz
+- Prueba 1 : (3 focos de luz)
 
 | acimut | elevacion |
 | :--------: | :--------: |
@@ -184,16 +184,17 @@ Se han realizado varias pruebas con distintos focos de luz:
 | 180  | 45   |
 | 270  | 50   |
 
- ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/prueba_1_res.png)
+ ![Resultado 1](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/prueba_1_res.png)
 
-- Prueba 2 : 
+- Prueba 2 : (2 focos de luz)
 
 | acimut | elevacion |
 | :--------: | :--------: |
 | 90   | 50   |
 | 270  | 90   |
 
- ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/prueba_2_res.png)
+ ![Resultado 2](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/prueba_2_res.png)
 
-
+# Conclusiones
+***
 
