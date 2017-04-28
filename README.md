@@ -1,6 +1,7 @@
 # Introducción y Objetivos
 ***
-[![N|Solid](https://geoinnova.org/blog-territorio/wp-content/uploads/2016/10/7.jpg)](https://nodesource.com/products/nsolid)
+![Portada](https://geoinnova.org/blog-territorio/wp-content/uploads/2016/10/7.jpg)
+
 
 El objetivo del presente documento es mostrar el trabajo realizado en la elaboración de una herramienta para ArcMap que realiza una combinación múltiple de sombreados sobre una imagen en formato ráster.
 
@@ -37,13 +38,26 @@ Una combinación de herramientas/tecnologías para crear la aplicación podría 
  
  El primer elemento de la herramienta llevado a cabo ha sido el formulario donde se introducirán los datos. Como se ha comentado antes consta de 4 parámetros:
   - Ráster de entrada (Input)
+![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_entrada.png)
  - Ráster de salida (Output)
+![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_salida.png)
  - Acimutes (MultiValue)
+![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/acimutes.png)
  - Elevaciones (MultiValue)
- 
+![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/elevaciones.png)
+
 Al ser los acimutes y las elevaciones parámetros Long Multivalue, es decir una lista de acimutes y una lista de elevaciones, el usuario deberá introducir en orden los pares de valores, es decir el primer elemento de la lista de acimutes se corresponde con el primer elemento de las lista de elevaciones.
-Sobreescribiendo el método updateMessages de la clase ToolValidator, podemos modificar el comportamiento de validación de la herramienta y así adaptarlo para mostrar errores cuando el usuario introduzca valores erroneos de acimut y elevación y poder avisar al usuario de que debe introducir el mismo número de acimutes y elevaciones.
- 
+Sobreescribiendo el método updateMessages de la clase ToolValidator, podemos modificar el comportamiento de validación de la herramienta y así adaptarlo para mostrar errores:
+ - Cuando el usuario introduzca valores erroneos de acimut y elevación
+![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error1.png)
+ - Para poder avisar al usuario que debe introducir el mismo número de acimutes y elevaciones.
+ ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error.png)
+
+Si hay el mismo número de elevaciones y acimutes, todos los acimutes introducidos están en el rango [0, 360] y todas las elevaciones introducidas están en el rango [0, 90] el formulario no mostrará ningún error de validación para los campos acimutes y elevaciones:
+ ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/sin_errores.png)
+
+A continuación se muestra el código (comentado) empleado para la validación, sobrescribiendo el método updateMessages de la clase ToolValidator:
+
 ```python
 import arcpy
 class ToolValidator(object):
@@ -96,62 +110,48 @@ class ToolValidator(object):
     return
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Y finalmente el código (comentado) del script que ejecuta el proceso:
 
 ```python
 import arcpy
 
 '''
-@ FunciÃ³n que ejecutarÃ¡ todo el proceso
+@ Función que ejecutará todo el proceso
 '''
 def do():
-    # Obtenemos los parÃ¡metros
+    # Obtenemos los parámetros
     mde, salida, acimuts, elevaciones = [ arcpy.GetParameter(i) for i in range(0, 4) ]
-    # Deben tener el mismo tamaÃ±o ambas listas
-    if not len(acimuts) == len(elevaciones) : arcpy.AddError('Debe seleccionar el mismo nÃºmero de elevaciones que acimuts')
+    # Deben tener el mismo tamaño ambas listas
+    if not len(acimuts) == len(elevaciones) : arcpy.AddError('Debe seleccionar el mismo número de elevaciones que acimuts')
     # Juntamos las dos listas por pares
     values = zip(acimuts, elevaciones)
     #values = map(lambda x : dict( zip(['acimut', 'elevacion'], x) ), zip(acimuts, elevaciones) )
 
-    hillshades = [] # AlmacenarÃ¡ todos los hillshades
+    hillshades = [] # Almacenará todos los hillshades
     # Recorremos las opciones [[acimut, elevacion], ...]
     for options in values :
         acimut, elevacion = options # Cogemos los valores de la lista
-        # Creamos el hillshade con los parÃ¡metros
+        # Creamos el hillshade con los parámetros
         hillshade = arcpy.sa.Hillshade(mde, acimut, elevacion)
-        # AÃ±adimos el hillshade creado
+        # Añadimos el hillshade creado
         hillshades.append(hillshade)
     # Cuando ha acabado el bucle ...
     # Sumamos todos los raster (sombreados)
     suma = reduce(lambda a, b : a + b, hillshades)
-    # Obtenemos el mÃ¡ximo y el mÃ­nimo de la suma de los rasters
+    # Obtenemos el máximo y el mínimo de la suma de los rasters
     maximum, minimum = suma.maximum, suma.minimum
     # Estandarizamos los valores entre [0, 255]
     estandarizado = (suma - minimum) * 255 / (maximum - minimum)
     # Guardamos la suma generada en la salida
     estandarizado.save(str(salida))
 
-# Entrada del programa -- Comprobamos la extensiÃ³n 'Spatial'
+# Entrada del programa -- Comprobamos la extensión 'Spatial'
 if arcpy.CheckExtension('Spatial') == 'Available':
-    #PeticiÃ³n de la licencia
+    #Petición de la licencia
     arcpy.CheckOutExtension('Spatial')
     do() ## EJECUTAMOS LA FUNCIÃ“N QUE HACE TODO EL PROCESO
-    #DevoluciÃ³n de la licencia
+    #Devolución de la licencia
     arcpy.CheckInExtension('Spatial')
 else:
     print ('Licencia no disponible')
-
 ```
