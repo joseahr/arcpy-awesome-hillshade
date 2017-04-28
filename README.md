@@ -1,14 +1,16 @@
 # Introducción y Objetivos
 ***
-![Portada](https://geoinnova.org/blog-territorio/wp-content/uploads/2016/10/7.jpg)
-
 
 El objetivo del presente documento es mostrar el trabajo realizado en la elaboración de una herramienta para ArcMap que realiza una combinación múltiple de sombreados sobre una imagen en formato ráster.
+
+> El problema reside en que en muchas ocasiones y debido a la variabilidad del terreno, un único tipo de sombreado no es óptimo para todas las zonas, por lo que sería útil disponer de una herramienta más flexible que permitiese combinar diversos focos de luz para mejorar el resultado final. (Inmhof, 1982; Keates, 1989)
+
+La herramienta diseñada permite la combinación de múltiples focos de luz simultaneamente, esto se consigue mediante la suma de los diferentes mapas de sombra generados independientemente para cada par de valores [acimut, elevación] y reescalando el resultado a un único rango de valores de gris [0, 255] 
 
 ### Herramientas utilizadas
 
  - ArcMap 10.1 
- - Python 2.7
+ - Python 2.7 (arcpy - junto con la extensión 'Spatial')
 
  
 ### Desarrollo del formulario (GUI) en ArcMap
@@ -36,7 +38,10 @@ Una combinación de herramientas/tecnologías para crear la aplicación podría 
 # Desarrollo de la práctica
 ***
  
- El primer elemento de la herramienta llevado a cabo ha sido el formulario donde se introducirán los datos. Como se ha comentado antes consta de 4 parámetros:
+ El primer elemento de la herramienta llevado a cabo ha sido el formulario donde se introducirán los datos. 
+![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/gui.png) 
+ 
+ Como se ha comentado antes consta de 4 parámetros:
   - Ráster de entrada (Input)
 
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_entrada.png)
