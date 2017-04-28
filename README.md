@@ -38,22 +38,33 @@ Una combinación de herramientas/tecnologías para crear la aplicación podría 
  
  El primer elemento de la herramienta llevado a cabo ha sido el formulario donde se introducirán los datos. Como se ha comentado antes consta de 4 parámetros:
   - Ráster de entrada (Input)
+
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_entrada.png)
+
  - Ráster de salida (Output)
+
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/raster_salida.png)
+
  - Acimutes (MultiValue)
+
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/acimutes.png)
+
  - Elevaciones (MultiValue)
+
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/elevaciones.png)
 
 Al ser los acimutes y las elevaciones parámetros Long Multivalue, es decir una lista de acimutes y una lista de elevaciones, el usuario deberá introducir en orden los pares de valores, es decir el primer elemento de la lista de acimutes se corresponde con el primer elemento de las lista de elevaciones.
 Sobreescribiendo el método updateMessages de la clase ToolValidator, podemos modificar el comportamiento de validación de la herramienta y así adaptarlo para mostrar errores:
  - Cuando el usuario introduzca valores erroneos de acimut y elevación
+
 ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error1.png)
+
  - Para poder avisar al usuario que debe introducir el mismo número de acimutes y elevaciones.
+
  ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/ejemplo_error.png)
 
 Si hay el mismo número de elevaciones y acimutes, todos los acimutes introducidos están en el rango [0, 360] y todas las elevaciones introducidas están en el rango [0, 90] el formulario no mostrará ningún error de validación para los campos acimutes y elevaciones:
+
  ![Ráster de entrada](https://raw.githubusercontent.com/joseahr/arcpy-awesome-hillshade/master/images/sin_errores.png)
 
 A continuación se muestra el código (comentado) empleado para la validación, sobrescribiendo el método updateMessages de la clase ToolValidator:
