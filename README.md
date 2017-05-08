@@ -1,3 +1,13 @@
+# Índice
+***
+
+- [Introducción y objetivos](#introducción-y-objetivos)
+    - [Herramientas utilizadas](#herramientas-utilizadas)
+    - [Desarrollo del formulario en ArcMap](#desarrollo-del-formulario-en-arcmap)
+- [Desarrollo de la práctica](#desarrollo-de-la-práctica)
+- [Resultados](#resultados)
+- [Conclusiones](#conclusiones)
+
 # Introducción y Objetivos
 ***
 
@@ -13,7 +23,7 @@ La herramienta diseñada permite la combinación de múltiples focos de luz simu
  - Python 2.7 (arcpy - junto con la extensión 'Spatial')
 
  
-### Desarrollo del formulario (GUI) en ArcMap
+### Desarrollo del formulario en ArcMap
 
 El desarrollo para el formulario es bastante sencillo y se adapta más o menos a las necesidades requeridas por la herramienta. Cuenta con:
  - Ráster de entrada (Input)
@@ -198,3 +208,6 @@ Se han realizado varias pruebas con distintos focos de luz:
 # Conclusiones
 ***
 
+Como se observa en los reusltados se ha intentado combinar focos de luz oblicuos, para obtener una buena representación de la topografía del terreno con focos de luz cenitales, para remarcar zonas de fuertes variaciones en el terreno y diminuir las posibles sombras generadas por el foco de luz oblicuo.
+
+Vemos que al quitar un foco de luz oblicuo se distingue peor las zonas de poco cambio en esa dirección (180º)
